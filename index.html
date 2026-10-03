@@ -13,10 +13,8 @@ body{
   background:#f0f2f5;
   padding:8px;
   margin:0;
-  padding-top: 100px; /* espaço para chave fixa */
+  padding-top: 100px;
 }
-
-/* 🔑 CHAVE FIXA — NÃO SOME AO ROLAR */
 .barra-chave{
   position:fixed;
   top:0;
@@ -33,135 +31,51 @@ body{
   gap:8px;
   box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }
-.texto-chave{
-  font-weight:bold;
-  font-size:15px;
-}
-.botoes-topo{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-}
-.botoes-topo button{
-  padding:6px 10px;
-  border:none;
-  border-radius:6px;
-  font-weight:bold;
-  cursor:pointer;
-  font-size:13px;
-}
+.texto-chave{font-weight:bold;font-size:15px;}
+.botoes-topo{display:flex;gap:6px;flex-wrap:wrap;}
+.botoes-topo button{padding:6px 10px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px;}
 .btn-backup{background:#00ccff; color:#000;}
 .btn-restaurar{background:#00ff88; color:#000;}
 .btn-compartilhar{background:#ffcc00; color:#000;}
-
-.box{
-  background:#fff;
-  border-radius:12px;
-  padding:12px;
-  max-width:1000px;
-  margin:0 auto 10px;
-}
+.box{background:#fff;border-radius:12px;padding:12px;max-width:1000px;margin:0 auto 10px;}
 h2{text-align:center; color:#1F4E79; margin:0 0 10px; font-size:18px;}
-.msg{
-  background:#e6ffea;
-  color:#006622;
-  padding:10px;
-  border-radius:8px;
-  margin:8px 0;
-  display:none;
-}
-.card{
-  background:#f9f9f9;
-  border-radius:10px;
-  border:2px solid #e67e22;
-  padding:12px;
-  margin-bottom:10px;
-}
-.row{
-  display:grid;
-  grid-template-columns:1fr 2fr;
-  gap:6px;
-  padding:4px 0;
-  align-items:center;
-}
+.msg{background:#e6ffea;color:#006622;padding:10px;border-radius:8px;margin:8px 0;display:none;}
+.card{background:#f9f9f9;border-radius:10px;border:2px solid #e67e22;padding:12px;margin-bottom:10px;}
+.row{display:grid;grid-template-columns:1fr 2fr;gap:6px;padding:4px 0;align-items:center;}
 label{font-weight:bold; color:#1F4E79; font-size:14px;}
-input, select{
-  width:100%;
-  padding:8px;
-  border:1px solid #ccc;
-  border-radius:6px;
-  font-size:15px;
-}
-button{
-  padding:10px 12px;
-  border:none;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
-  margin:4px 2px;
-}
+input, select{width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:15px;}
+button{padding:10px 12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:4px 2px;}
 button.a{background:#27ae60; color:#fff;}
 button.b{background:#1F4E79; color:#fff;}
 button.c{background:#e67e22; color:#fff;}
 button.r{background:#c0392b; color:#fff;}
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-  font-size:13px;
-}
-th, td{
-  border:1px solid #ccc;
-  padding:6px;
-  text-align:center;
-}
-th{
-  background:#ECF0F1;
-  font-weight:bold;
-  background:linear-gradient(#d6eaf8, #bad9f5);
-}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
+th, td{border:1px solid #ccc;padding:6px;text-align:center;}
+th{background:linear-gradient(#d6eaf8, #bad9f5);}
 tr:nth-child(even){background:#f8faff;}
 .areaFixa{display:none; margin-top:10px;}
-.lista-item{
-  background:#f8faff;
-  border:1px solid #1F4E79;
-  border-radius:8px;
-  padding:10px;
-  margin:6px 0;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:8px;
-}
-.btn-excluir{
-  background:#ff4444;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  padding:4px 8px;
-  cursor:pointer;
-}
+.lista-item{background:#f8faff;border:1px solid #1F4E79;border-radius:8px;padding:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.btn-excluir{background:#ff4444;color:#fff;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;}
 </style>
 </head>
 <body>
 
-<!-- 🔑 CHAVE FIXA — SEMPRE VISÍVEL -->
 <div class="barra-chave">
   <div class="texto-chave">🔑 Chave: ESCALA-5X1-PR-2026</div>
   <div class="botoes-topo">
     <button class="btn-backup" onclick="fazerBackup()">💾 Backup</button>
     <button class="btn-restaurar" onclick="restaurarArquivo()">♻️ Restaurar</button>
     <button class="btn-compartilhar" onclick="compartilhar()">🔗 Compartilhar</button>
+    <button class="btn-compartilhar" style="background:#fff" onclick="convidar()">👥 Convidar</button>
   </div>
 </div>
 
 <div class="box">
-  <h2>📅 GERADOR DE ESCALAS 5x1 — VERSÃO FINAL</h2>
+  <h2>📅 GERADOR DE ESCALAS 5x1 — VERSÃO CORRIGIDA</h2>
   <div id="msg" class="msg"></div>
 
   <div class="card">
-    <label class="label">DEFINIR INÍCIO DA ESCALA 5x1 (pra não mudar)</label>
+    <label>DEFINIR INÍCIO DA ESCALA 5x1 (pra não mudar)</label>
     <div class="row">
       <label>Data que começou a contar:</label>
       <input type="date" id="dataInicio" value="2026-10-01">
@@ -181,14 +95,14 @@ tr:nth-child(even){background:#f8faff;}
       <div class="row">
         <label>3 — TIPO:</label>
         <select id="tipo">
-          <option value="5x1" selected>5x1 — AUTOMÁTICO</option>
-          <option value="folga">Folga fixa</option>
+          <option value="5x1" selected>5x1 — AUTOMÁTICO COM RODÍZIO</option>
+          <option value="folga">Folga fixa por dia da semana</option>
         </select>
       </div>
       <div class="row">
-        <label>DIA FOLGA:</label>
+        <label>DIA FOLGA FIXA:</label>
         <select id="diaSemana">
-          <option value="">Automático</option>
+          <option value="">Automático (5x1)</option>
           <option value="Segunda">Segunda</option>
           <option value="Terça">Terça</option>
           <option value="Quarta">Quarta</option>
@@ -199,12 +113,8 @@ tr:nth-child(even){background:#f8faff;}
         </select>
       </div>
       <div class="row">
-        <label>INÍCIO FOLGA:</label>
-        <input type="text" id="inicioFolga" placeholder="Ex: 5,12,19,26">
-      </div>
-      <div class="row">
-        <label>DIAS QUE FOLGA:</label>
-        <input type="text" id="diasFolga" placeholder="Ex: 5,12,19,26">
+        <label>DIAS QUE FOLGA (manual):</label>
+        <input type="text" id="diasFolga" placeholder="Ex: 5,12,19,26 (deixa vazio pro auto)">
       </div>
       <button class="a" onclick="adicionar()">➕ ADICIONAR</button>
     </div>
@@ -213,25 +123,13 @@ tr:nth-child(even){background:#f8faff;}
       <div class="row">
         <label>MÊS:</label>
         <select id="mes">
-          <option value="1">Janeiro</option>
-          <option value="2">Fevereiro</option>
-          <option value="3">Março</option>
-          <option value="4">Abril</option>
-          <option value="5">Maio</option>
-          <option value="6">Junho</option>
-          <option value="7">Julho</option>
-          <option value="8">Agosto</option>
-          <option value="9">Setembro</option>
-          <option value="10" selected>Outubro</option>
-          <option value="11">Novembro</option>
-          <option value="12">Dezembro</option>
+          <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option><option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option><option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option><option value="10" selected>Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
         </select>
         <label>ANO:</label>
         <input type="number" id="ano" value="2026">
       </div>
       <button class="b" onclick="gerar()">📋 GERAR ESCALA AGORA</button>
       <button class="c" onclick="salvarDefinitivo()">💾 SALVAR DEFINITIVA</button>
-      <button class="a" onclick="carregarSalvo()">📂 CARREGAR SALVO</button>
     </div>
 
     <div id="lista" class="box" style="background:#eee; padding:8px; border-radius:8px;">
@@ -243,27 +141,17 @@ tr:nth-child(even){background:#f8faff;}
     </div>
 
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;">
-      <button class="b" onclick="exemplo()">📝 CARREGAR EXEMPLO COMPLETO</button>
+      <button class="b" onclick="exemplo()">📝 CARREGAR EXEMPLO</button>
       <button class="r" onclick="limparTudo()">🗑️ LIMPAR TUDO</button>
     </div>
   </div>
 </div>
 
-<!-- Input oculto para restaurar arquivo -->
 <input type="file" id="inputRestaurar" accept=".json" style="display:none" onchange="processarRestaurar(event)">
 
 <script>
-// Registrar Service Worker → vira App!
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(reg => console.log('✅ App registrado', reg))
-      .catch(err => console.log('❌ Erro no registro', err));
-  });
-}
-
-const CHAVE_DADOS = 'escala_5x1_dados';
-const CHAVE_TRAVADA = 'escala_travada';
+const CHAVE_DADOS = 'escala_5x1_dados_v2';
+const CHAVE_TRAVADA = 'escala_travada_v2';
 let funcs = [];
 let escalaTravada = null;
 
@@ -285,7 +173,7 @@ function definirEscala(){
   escalaTravada = data;
   localStorage.setItem(CHAVE_TRAVADA, data);
   document.getElementById('areaFixa').style.display = 'block';
-  mostrarMsg('✅ Escala definida e travada em: ' + data);
+  mostrarMsg('✅ Escala travada em: ' + data + ' - não vai mais sumir!');
 }
 
 function mostrarMsg(texto){
@@ -298,19 +186,18 @@ function mostrarMsg(texto){
 function adicionar(){
   const nome = document.getElementById('nome').value.trim();
   if(!nome){ alert('Digite o nome!'); return; }
-  const hinicio = document.getElementById('hinicio').value;
-  const hterm = document.getElementById('hterm').value;
-  const tipo = document.getElementById('tipo').value;
-  const diaSemana = document.getElementById('diaSemana').value;
-  const inicioFolga = document.getElementById('inicioFolga').value;
-  const diasFolga = document.getElementById('diasFolga').value;
-
-  funcs.push({nome, hinicio, hterm, tipo, diaSemana, inicioFolga, diasFolga});
+  funcs.push({
+    nome,
+    hinicio: document.getElementById('hinicio').value,
+    hterm: document.getElementById('hterm').value,
+    tipo: document.getElementById('tipo').value,
+    diaSemana: document.getElementById('diaSemana').value,
+    diasFolga: document.getElementById('diasFolga').value
+  });
   salvarDefinitivo();
   listar();
-  
-  // Limpar
   document.getElementById('nome').value = '';
+  document.getElementById('diasFolga').value = '';
   mostrarMsg('✅ ' + nome + ' adicionado!');
 }
 
@@ -320,37 +207,26 @@ function listar(){
     lista.innerHTML = '<strong>Pessoas cadastradas:</strong> Nenhuma';
     return;
   }
-  lista.innerHTML = funcs.map((p, i) => `
+  lista.innerHTML = '<strong>Pessoas cadastradas:</strong>' + funcs.map((p, i) => `
     <div class="lista-item">
-      <div>
-        <strong>${p.nome}</strong><br>
-        ${p.hinicio} às ${p.hterm} — ${p.tipo}
-      </div>
+      <div><strong>${p.nome}</strong><br><small>${p.hinicio} às ${p.hterm} — ${p.tipo} ${p.diasFolga?'(folgas: '+p.diasFolga+')':''}</small></div>
       <button class="btn-excluir" onclick="remover(${i})">🗑️</button>
     </div>
   `).join('');
 }
 
 function remover(indice){
-  if(confirm('Remover essa pessoa?')){
+  if(confirm('Remover essa pessoa? 🗑️')){
     funcs.splice(indice, 1);
     salvarDefinitivo();
     listar();
-    document.getElementById('tabela').innerHTML = '';
   }
 }
 
 function salvarDefinitivo(){
   localStorage.setItem(CHAVE_DADOS, JSON.stringify(funcs));
-  mostrarMsg('✅ Salvo!');
-}
-
-function carregarSalvo(){
-  const dados = localStorage.getItem(CHAVE_DADOS);
-  if(!dados){ alert('Nenhum dado salvo!'); return; }
-  funcs = JSON.parse(dados);
-  listar();
-  mostrarMsg('✅ Dados carregados!');
+  // backup duplo pra chave não sumir
+  localStorage.setItem(CHAVE_DADOS+'_bkp', JSON.stringify(funcs));
 }
 
 function limparTudo(){
@@ -362,121 +238,99 @@ function limparTudo(){
   document.getElementById('areaFixa').style.display = 'none';
   document.getElementById('tabela').innerHTML = '';
   listar();
-  mostrarMsg('🗑️ Tudo limpo!');
 }
 
 function exemplo(){
   funcs = [
-    {nome:'Natália', hinicio:'08:00', hterm:'17:00', tipo:'5x1', diaSemana:'', inicioFolga:'', diasFolga:''},
-    {nome:'Segundo', hinicio:'09:00', hterm:'18:00', tipo:'5x1', diaSemana:'', inicioFolga:'', diasFolga:''}
+    {nome:'Natália', hinicio:'08:00', hterm:'17:00', tipo:'5x1', diaSemana:'', diasFolga:''},
+    {nome:'Segundo', hinicio:'09:00', hterm:'18:00', tipo:'5x1', diaSemana:'', diasFolga:''},
+    {nome:'José', hinicio:'10:00', hterm:'19:00', tipo:'5x1', diaSemana:'', diasFolga:''}
   ];
   salvarDefinitivo();
   listar();
   mostrarMsg('✅ Exemplo carregado!');
 }
 
+// === CORREÇÃO PRINCIPAL AQUI ===
 function gerar(){
   if(!escalaTravada){ alert('Defina a data de início primeiro!'); return; }
-  
   const mes = parseInt(document.getElementById('mes').value);
   const ano = parseInt(document.getElementById('ano').value);
   const tabela = document.getElementById('tabela');
-  
-  // Dias do mês
   const diasMes = new Date(ano, mes, 0).getDate();
   const nomesDias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  
+  const baseDate = new Date(escalaTravada + 'T12:00:00');
+
   let cabecalho = '<tr><th>Data</th><th>Dia</th>';
   funcs.forEach(p => cabecalho += `<th>${p.nome}</th>`);
   cabecalho += '</tr>';
   
   let linhas = '';
   for(let dia=1; dia<=diasMes; dia++){
-    const dataAtual = new Date(ano, mes-1, dia);
-    const diaSemana = nomesDias[dataAtual.getDay()];
-    const dataStr = `${dia}/${mes}`;
+    const dataAtual = new Date(ano, mes-1, dia, 12,0,0);
+    const diaSemanaIdx = dataAtual.getDay();
+    const diaSemanaNome = nomesDias[diaSemanaIdx];
+    const dataStr = `${String(dia).padStart(2,'0')}/${String(mes).padStart(2,'0')}`;
     
     let celulas = '';
-    funcs.forEach(p => {
+    funcs.forEach((p, idx) => {
       let texto = `${p.hinicio}–${p.hterm}`;
       let estilo = '';
-      
-      // Lógica 5x1: conta a partir da data inicial travada
-      if(p.tipo === '5x1'){
-        const dataInicioObj = new Date(escalaTravada);
-        const difDias = Math.floor((dataAtual - dataInicioObj) / (1000*60*60*24));
-        const ciclo = difDias % 6; // 5 trabalho + 1 folga
-        if(ciclo === 5){
-          texto = 'FOLGA';
-          estilo = 'color:#e67e22; font-weight:bold;';
-        }
+      let isFolga = false;
+
+      if(p.diasFolga && p.diasFolga.trim() !== ''){
+        let lista = p.diasFolga.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n));
+        if(lista.includes(dia)) isFolga = true;
+      } else if(p.tipo === '5x1'){
+        const diffDias = Math.floor((dataAtual - baseDate) / (1000*60*60*24));
+        const ciclo = ((diffDias + idx) % 6 + 6) % 6; // CORRIGIDO: +idx pra rodízio e +6 pra não negativar
+        if(ciclo === 5) isFolga = true;
+      } else if(p.tipo === 'folga' && p.diaSemana){
+        if(diaSemanaNome.toLowerCase().includes(p.diaSemana.substring(0,3).toLowerCase())) isFolga = true;
       }
-      
+
+      if(isFolga){ texto = 'FOLGA'; estilo = 'background:#ffdddd; color:#c0392b; font-weight:bold;'; }
       celulas += `<td style="${estilo}">${texto}</td>`;
     });
     
-    linhas += `<tr><td>${dataStr}</td><td>${diaSemana}</td>${celulas}</tr>`;
+    linhas += `<tr><td>${dataStr}</td><td>${diaSemanaNome}</td>${celulas}</tr>`;
   }
   
   tabela.innerHTML = cabecalho + linhas;
-  mostrarMsg('✅ Escala gerada!');
+  mostrarMsg('✅ Escala gerada corretamente!');
 }
 
-// 💾 BAIXAR BACKUP
 function fazerBackup(){
-  const dados = {
-    data: new Date().toLocaleString('pt-BR'),
-    versao: '2.0',
-    escalaTravada,
-    funcionarios: funcs
-  };
+  const dados = { data: new Date().toLocaleString('pt-BR'), escalaTravada, funcionarios: funcs };
   const blob = new Blob([JSON.stringify(dados, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `backup_escala_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
+  const a = document.createElement('a'); a.href = url; a.download = `backup_escala_${new Date().toISOString().slice(0,10)}.json`; a.click();
   URL.revokeObjectURL(url);
-  mostrarMsg('✅ Backup baixado!');
 }
-
-// ♻️ RESTAURAR
-function restaurarArquivo(){
-  document.getElementById('inputRestaurar').click();
-}
-
+function restaurarArquivo(){ document.getElementById('inputRestaurar').click(); }
 function processarRestaurar(event){
-  const arq = event.target.files[0];
-  if(!arq) return;
-  if(!confirm('Substitui dados atuais?')) return;
-  
+  const arq = event.target.files[0]; if(!arq) return;
+  if(!confirm('Restaurar? Vai substituir os dados atuais.')) return;
   const leitor = new FileReader();
   leitor.onload = (e) => {
     try{
       const d = JSON.parse(e.target.result);
-      funcs = d.funcionarios || [];
-      if(d.escalaTravada){
-        escalaTravada = d.escalaTravada;
-        localStorage.setItem(CHAVE_TRAVADA, escalaTravada);
-        document.getElementById('dataInicio').value = escalaTravada;
-        document.getElementById('areaFixa').style.display = 'block';
-      }
-      salvarDefinitivo();
-      listar();
-      mostrarMsg('✅ Restaurado com sucesso!');
+      funcs = d.funcionarios || d || [];
+      if(d.escalaTravada){ escalaTravada = d.escalaTravada; localStorage.setItem(CHAVE_TRAVADA, escalaTravada); document.getElementById('dataInicio').value = escalaTravada; document.getElementById('areaFixa').style.display = 'block'; }
+      salvarDefinitivo(); listar(); mostrarMsg('✅ Restaurado!');
     }catch{ alert('❌ Arquivo inválido!'); }
   };
   leitor.readAsText(arq);
   event.target.value = '';
 }
-
-// 🔗 COMPARTILHAR
 function compartilhar(){
-  const texto = `📅 Escala 5x1 — ${funcs.length} pessoas\nData base: ${escalaTravada || 'Não definida'}\n\n` +
-    funcs.map(p => `👤 ${p.nome}: ${p.hinicio} às ${p.hterm} (${p.tipo})`).join('\n');
-  
+  const texto = `📅 Escala 5x1 — ${funcs.length} pessoas\nBase: ${escalaTravada}\n\n` + funcs.map(p => `👤 ${p.nome}: ${p.hinicio} às ${p.hterm}`).join('\n');
   if(navigator.share) navigator.share({title:'Escala 5x1', text:texto});
-  else {navigator.clipboard.writeText(texto); alert('✅ Copiado!');}
+  else { navigator.clipboard.writeText(texto); alert('✅ Copiado!'); }
+}
+function convidar(){
+  const url = location.href;
+  navigator.clipboard.writeText(url).then(()=>alert('🔗 Link copiado! Envie pra convidar: '+url));
 }
 </script>
 </body>

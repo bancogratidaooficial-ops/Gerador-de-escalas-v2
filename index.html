@@ -1,57 +1,483 @@
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Escalas 5x1</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1F4E79">
 <style>
-body{font-family:Arial;background:#f0f2f5;padding:8px;margin:0}
-.box{background:#fff;border-radius:12px;padding:12px;max-width:1100px;margin:auto}
-label{font-size:11px;font-weight:bold;color:#1F4E79;display:block;margin-top:6px}
-input,select{width:100%;padding:11px;border:1px solid #ccc;border-radius:8px;font-size:15px;margin-top:3px}
-button{width:100%;padding:13px;border:0;border-radius:8px;color:#fff;font-weight:bold;margin:5px 0}
-.v{background:#27ae60}.a{background:#1F4E79}.g{background:gray}.r{background:#c0392b}.o{background:#e67e22}.y{background:#f1c40f;color:#000}.p{background:#8e44ad}
-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px}
-th{background:#1F4E79;color:#fff;padding:6px}
-td{border:1px solid #ccc;padding:5px;text-align:center}
-.T{background:#C6EFCE}.F{background:#FFC7CE;font-weight:bold}.FM{background:#d6eaf8;font-weight:bold;border:2px solid #2980b9}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.card{border:2px solid #1F4E79;border-radius:10px;padding:10px;background:#f8faff;margin:8px 0}
-.ok{background:#d4edda;padding:8px;border-radius:6px;color:#155724;font-size:12px;margin:6px 0;display:none}
-</style></head><body>
+*{box-sizing:border-box;}
+body{
+  font-family:Arial, sans-serif;
+  background:#f0f2f5;
+  padding:8px;
+  margin:0;
+  padding-top: 100px; /* espaço para chave fixa */
+}
+
+/* 🔑 CHAVE FIXA — NÃO SOME AO ROLAR */
+.barra-chave{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  background:#1F4E79;
+  color:#fff;
+  padding:12px 15px;
+  z-index:999;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+.texto-chave{
+  font-weight:bold;
+  font-size:15px;
+}
+.botoes-topo{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.botoes-topo button{
+  padding:6px 10px;
+  border:none;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:13px;
+}
+.btn-backup{background:#00ccff; color:#000;}
+.btn-restaurar{background:#00ff88; color:#000;}
+.btn-compartilhar{background:#ffcc00; color:#000;}
+
+.box{
+  background:#fff;
+  border-radius:12px;
+  padding:12px;
+  max-width:1000px;
+  margin:0 auto 10px;
+}
+h2{text-align:center; color:#1F4E79; margin:0 0 10px; font-size:18px;}
+.msg{
+  background:#e6ffea;
+  color:#006622;
+  padding:10px;
+  border-radius:8px;
+  margin:8px 0;
+  display:none;
+}
+.card{
+  background:#f9f9f9;
+  border-radius:10px;
+  border:2px solid #e67e22;
+  padding:12px;
+  margin-bottom:10px;
+}
+.row{
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:6px;
+  padding:4px 0;
+  align-items:center;
+}
+label{font-weight:bold; color:#1F4E79; font-size:14px;}
+input, select{
+  width:100%;
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:15px;
+}
+button{
+  padding:10px 12px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:4px 2px;
+}
+button.a{background:#27ae60; color:#fff;}
+button.b{background:#1F4E79; color:#fff;}
+button.c{background:#e67e22; color:#fff;}
+button.r{background:#c0392b; color:#fff;}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  font-size:13px;
+}
+th, td{
+  border:1px solid #ccc;
+  padding:6px;
+  text-align:center;
+}
+th{
+  background:#ECF0F1;
+  font-weight:bold;
+  background:linear-gradient(#d6eaf8, #bad9f5);
+}
+tr:nth-child(even){background:#f8faff;}
+.areaFixa{display:none; margin-top:10px;}
+.lista-item{
+  background:#f8faff;
+  border:1px solid #1F4E79;
+  border-radius:8px;
+  padding:10px;
+  margin:6px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.btn-excluir{
+  background:#ff4444;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  padding:4px 8px;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- 🔑 CHAVE FIXA — SEMPRE VISÍVEL -->
+<div class="barra-chave">
+  <div class="texto-chave">🔑 Chave: ESCALA-5X1-PR-2026</div>
+  <div class="botoes-topo">
+    <button class="btn-backup" onclick="fazerBackup()">💾 Backup</button>
+    <button class="btn-restaurar" onclick="restaurarArquivo()">♻️ Restaurar</button>
+    <button class="btn-compartilhar" onclick="compartilhar()">🔗 Compartilhar</button>
+  </div>
+</div>
+
 <div class="box">
-<h2 style="text-align:center">ESCALA 5x1 - VERSAO FINAL COM SALVAMENTO</h2>
-<div id="msg" class="ok"></div>
-<div class="card" style="background:#fff3cd;border-color:#e67e22">
-<label style="color:#e67e22">DEFINIR INICIO DA ESCALA 5x1 (pra folga nao mudar)</label>
-<div class="row"><div><label>Data que comecou a contar</label><input type="date" id="dataInicio" value="2026-10-01"></div><div><label>Quem folga nessa data?</label><select id="folgaInicial"><option value="0">Natal folga</option><option value="1">Kaue folga</option><option value="2">Mario folga</option><option value="3">Jose Marcos</option><option value="4">Folguista</option><option value="5">Todos trabalham</option></select></div></div>
-<button class="y" onclick="definirEscala()">📌 DEFINIR E TRAVAR ESCALA 5x1</button>
+  <h2>📅 GERADOR DE ESCALAS 5x1 — VERSÃO FINAL</h2>
+  <div id="msg" class="msg"></div>
+
+  <div class="card">
+    <label class="label">DEFINIR INÍCIO DA ESCALA 5x1 (pra não mudar)</label>
+    <div class="row">
+      <label>Data que começou a contar:</label>
+      <input type="date" id="dataInicio" value="2026-10-01">
+    </div>
+    <button class="a" onclick="definirEscala()">✅ DEFINIR E TRAVAR ESCALA 5x1</button>
+  </div>
+
+  <div id="areaFixa" class="areaFixa">
+    <div class="card">
+      <label>1 — NOME:</label>
+      <input id="nome" placeholder="Ex: José Marcos">
+      <div class="row">
+        <label>2 — HORÁRIO:</label>
+        <input type="time" id="hinicio" value="10:00">
+        <input type="time" id="hterm" value="19:00">
+      </div>
+      <div class="row">
+        <label>3 — TIPO:</label>
+        <select id="tipo">
+          <option value="5x1" selected>5x1 — AUTOMÁTICO</option>
+          <option value="folga">Folga fixa</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>DIA FOLGA:</label>
+        <select id="diaSemana">
+          <option value="">Automático</option>
+          <option value="Segunda">Segunda</option>
+          <option value="Terça">Terça</option>
+          <option value="Quarta">Quarta</option>
+          <option value="Quinta">Quinta</option>
+          <option value="Sexta">Sexta</option>
+          <option value="Sábado">Sábado</option>
+          <option value="Domingo">Domingo</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>INÍCIO FOLGA:</label>
+        <input type="text" id="inicioFolga" placeholder="Ex: 5,12,19,26">
+      </div>
+      <div class="row">
+        <label>DIAS QUE FOLGA:</label>
+        <input type="text" id="diasFolga" placeholder="Ex: 5,12,19,26">
+      </div>
+      <button class="a" onclick="adicionar()">➕ ADICIONAR</button>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <label>MÊS:</label>
+        <select id="mes">
+          <option value="1">Janeiro</option>
+          <option value="2">Fevereiro</option>
+          <option value="3">Março</option>
+          <option value="4">Abril</option>
+          <option value="5">Maio</option>
+          <option value="6">Junho</option>
+          <option value="7">Julho</option>
+          <option value="8">Agosto</option>
+          <option value="9">Setembro</option>
+          <option value="10" selected>Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
+        <label>ANO:</label>
+        <input type="number" id="ano" value="2026">
+      </div>
+      <button class="b" onclick="gerar()">📋 GERAR ESCALA AGORA</button>
+      <button class="c" onclick="salvarDefinitivo()">💾 SALVAR DEFINITIVA</button>
+      <button class="a" onclick="carregarSalvo()">📂 CARREGAR SALVO</button>
+    </div>
+
+    <div id="lista" class="box" style="background:#eee; padding:8px; border-radius:8px;">
+      <strong>Pessoas cadastradas:</strong> Nenhuma
+    </div>
+
+    <div class="box" style="overflow:auto;">
+      <table id="tabela"></table>
+    </div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;">
+      <button class="b" onclick="exemplo()">📝 CARREGAR EXEMPLO COMPLETO</button>
+      <button class="r" onclick="limparTudo()">🗑️ LIMPAR TUDO</button>
+    </div>
+  </div>
 </div>
-<div class="card">
-<label>1 - NOME</label><input id="nome" placeholder="Ex: Jose Marcos">
-<label>2 - HORARIO</label><div class="row"><input type="time" id="hin" value="10:00"><input type="time" id="hout" value="18:20"></div>
-<label>3 - TIPO</label><select id="tipo" onchange="trocaTipo()"><option value="5x1">5x1 AUTOMATICO</option><option value="fixa">FOLGA FIXA</option><option value="encarregado">ENCARREGADO Sab Dom</option><option value="folguista">FOLGUISTA MADRUGADA</option><option value="personal">PERSONALIZADA</option></select>
-<div id="areaFixa" style="display:none"><label>DIA FOLGA</label><select id="diaSemana"><option>Segunda</option><option>Terca</option><option>Quarta</option><option>Quinta</option><option>Sexta</option><option>Sabado</option><option>Domingo</option></select></div>
-<div id="area5x1"><label>INICIO FOLGA</label><select id="inicioFolga"><option value="0">Folga 06,12,18,24,30</option><option value="1">Folga 05,11,17,23,29</option><option value="2">Folga 04,10,16,22,28</option><option value="3">Folga 03,09,15,21,27</option><option value="4">Folga 02,08,14,20,26</option><option value="5">Folga 01,07,13,19,25,31</option></select></div>
-<div id="areaPers" style="display:none"><label>DIAS QUE FOLGA</label><input id="diasFolga" placeholder="Ex: 5,12,19,26"></div>
-<div id="areaFolguista" style="display:none;background:#d6eaf8;padding:8px;border-radius:6px;margin-top:6px;font-size:11px"><b>Folguista so quando madrugada folgar.</b></div>
-<button class="v" onclick="add()">+ ADICIONAR</button>
-</div>
-<div class="row"><div><label>MES</label><select id="mes"><option value="9">SETEMBRO</option><option value="10" selected>OUTUBRO</option><option value="11">NOVEMBRO</option></select></div><div><label>ANO</label><select id="ano"><option>2026</option></select></div></div>
-<button class="a" onclick="gerar()">GERAR ESCALA AGORA</button>
-<div class="row"><button class="p" onclick="salvarDefinitivo()">💾 SALVAR DEFINITIVA</button><button class="y" onclick="carregarSalvo()">📂 CARREGAR SALVA</button></div>
-<div id="lista" style="background:#eee;padding:8px;border-radius:8px;margin:6px 0;font-size:12px"></div>
-<div style="overflow:auto"><table id="tab"></table></div>
-<div class="row"><button class="o" onclick="exemplo()">CARREGAR EXEMPLO COMPLETO</button><button class="a" onclick="window.print()">IMPRIMIR PDF</button></div>
-<button class="r" onclick="limparTudo()">LIMPAR TUDO</button>
-</div>
+
+<!-- Input oculto para restaurar arquivo -->
+<input type="file" id="inputRestaurar" accept=".json" style="display:none" onchange="processarRestaurar(event)">
+
 <script>
-var funcs=[];var escalaTravada=null;
-function trocaTipo(){var t=document.getElementById('tipo').value;document.getElementById('areaFixa').style.display=t=='fixa'?'block':'none';document.getElementById('areaPers').style.display=t=='personal'?'block':'none';document.getElementById('area5x1').style.display=t=='5x1'?'block':'none';document.getElementById('areaFolguista').style.display=t=='folguista'?'block':'none';if(t=='folguista'){document.getElementById('nome').value='FOLGUISTA DA MADRUGADA';document.getElementById('hin').value='22:40';document.getElementById('hout').value='07:00';}}
-function showMsg(txt){var m=document.getElementById('msg');m.style.display='block';m.innerHTML=txt;setTimeout(()=>{m.style.display='none'},4000);}
-function definirEscala(){var data=document.getElementById('dataInicio').value;var quem=document.getElementById('folgaInicial').value;escalaTravada={data:data,quem:parseInt(quem),definida:true};localStorage.setItem('escalaTravada',JSON.stringify(escalaTravada));showMsg('✅ ESCALA TRAVADA! Inicio: '+data);salvarDefinitivo();gerar();}
-function salvarDefinitivo(){localStorage.setItem('funcsEscala',JSON.stringify(funcs));if(escalaTravada)localStorage.setItem('escalaTravada',JSON.stringify(escalaTravada));localStorage.setItem('mes',document.getElementById('mes').value);showMsg('✅ SALVO! Pode fechar o app que volta igual.');}
-function carregarSalvo(){var s=localStorage.getItem('funcsEscala');var t=localStorage.getItem('escalaTravada');if(!s){showMsg('❌ Nenhuma salva');return}funcs=JSON.parse(s);if(t)escalaTravada=JSON.parse(t);lista();gerar();showMsg('📂 CARREGADA! '+funcs.length+' funcionarios');}
-function add(){var nome=document.getElementById('nome').value.trim();if(!nome){alert('Digite nome');return}var hin=document.getElementById('hin').value;var hout=document.getElementById('hout').value;var hor=hin+'-'+hout;var tipo=document.getElementById('tipo').value;var diaSemana=document.getElementById('diaSemana').value;var inicio=parseInt(document.getElementById('inicioFolga').value);var diasFolga=document.getElementById('diasFolga').value;funcs.push({nome:nome,hor:hor,tipo:tipo,diaSemana:diaSemana,inicio:inicio,diasFolga:diasFolga});document.getElementById('nome').value='';lista();gerar();salvarDefinitivo();}
-function lista(){var d=document.getElementById('lista');if(funcs.length==0){d.innerHTML='Nenhum';return}var t='Adicionados: '+funcs.length+'<br>';for(var i=0;i<funcs.length;i++){var f=funcs[i];t+=(i+1)+'. '+f.nome+' | '+f.hor+' | '+f.tipo+' <a href="#" onclick="rem('+i+')">[X]</a><br>';}if(escalaTravada&&escalaTravada.definida)t+='<br><b style=color:green>📌 Travada em: '+escalaTravada.data+'</b>';d.innerHTML=t;}
-function rem(i){funcs.splice(i,1);lista();gerar();salvarDefinitivo();}
-function limparTudo(){if(confirm('Apagar tudo?')){funcs=[];localStorage.removeItem('funcsEscala');localStorage.removeItem('escalaTravada');lista();gerar();}}
-function exemplo(){funcs=[{nome:'Natal',hor:'15:20-22:40',tipo:'5x1',inicio:0,diaSemana:'Segunda',diasFolga:''},{nome:'Kaue',hor:'07:00-15:20',tipo:'5x1',inicio:1,diaSemana:'Segunda',diasFolga:''},{nome:'Mario (MADRUGADA FIXO)',hor:'22:40-07:00',tipo:'5x1',inicio:2,diaSemana:'Segunda',diasFolga:''},{nome:'Jose Marcos',hor:'10:00-18:20',tipo:'5x1',inicio:3,diaSemana:'Segunda',diasFolga:''},{nome:'FOLGUISTA DA MADRUGADA',hor:'22:40-07:00',tipo:'folguista',inicio:2,diaSemana:'Segunda',diasFolga:''},{nome:'Celio Encarregado',hor:'11:00-19:40',tipo:'encarregado',inicio:0,diaSemana:'Segunda',diasFolga:''}];var trav=localStorage.getItem('escalaTravada');if(!trav){escalaTravada={data:document.getElementById('dataInicio').value,quem:0,definida:true};localStorage.setItem('escalaTravada',JSON.stringify(escalaTravada));}lista();gerar();salvarDefinitivo();showMsg('✅ Exemplo carregado e travado!');}
-function gerar(){var mes=parseInt(document.getElementById('mes').value);var ano=parseInt(document.getElementById('ano').value);var dias=new Date(ano,mes,0).getDate();var tab=document.getElementById('tab');if(funcs.length==0){tab.innerHTML='<tr><td>Adicione</td></tr>';return}var dsem=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];var h='<tr><th>Nome</th><th>Horario</th><th>Tipo</th>';for(var d=1;d<=dias;d++){var dt=new Date(ano,mes-1,d);h+='<th>'+d+'/'+mes+'<br>'+dsem[dt.getDay()]+'</th>';}h+='</tr>';var madrugadaFixo=null;for(var i=0;i<funcs.length;i++){if(funcs[i].nome.toLowerCase().includes('mario')){madrugadaFixo=funcs[i];break;}}if(!madrugadaFixo){for(var i=0;i<funcs.length;i++){if(funcs[i].hor.includes('22:40')&&funcs[i].tipo=='5x1'){madrugadaFixo=funcs[i];break;}}}for(var i=0;i<funcs.length;i++){var f=funcs[i];h+='<tr><td style=text-align:left><b>'+f.nome+'</b></td><td><small>'+f.hor+'</small></td><td><small>'+f.tipo+'</small></td>';for(var d=1;d<=dias;d++){var dt=new Date(ano,mes-1,d);var wd=dt.getDay();if(f.tipo=='encarregado'){if(wd==0||wd==6)h+="<td class='F'>F</td>";else h+="<td class='T'>T</td>";}else if(f.tipo=='fixa'){var mapa=['Domingo','Segunda','Terca','Quarta','Quinta','Sexta','Sabado'];if(mapa[wd]==f.diaSemana)h+="<td class='F'>F</td>";else h+="<td class='T'>T</td>";}else if(f.tipo=='personal'){var ld=f.diasFolga.split(',').map(s=>parseInt(s.trim()));if(ld.includes(d))h+="<td class='F'>F</td>";else h+="<td class='T'>T</td>";}else if(f.tipo=='folguista'){if(madrugadaFixo){var folgaM=(d+madrugadaFixo.inicio)%6==0;if(folgaM)h+="<td class='FM'>T<br><span style=font-size:8px>COBRE</span></td>";else h+="<td style=background:#eee>-</td>";}else{if((d+f.inicio)%6==0)h+="<td class='FM'>T</td>";else h+="<td style=background:#eee>-</td>";}}else{if((d+f.inicio)%6==0)h+="<td class='F'>F</td>";else h+="<td class='T'>T</td>";}}h+='</tr>';}tab.innerHTML=h;}
-window.onload=function(){var s=localStorage.getItem('funcsEscala');var t=localStorage.getItem('escalaTravada');if(s){funcs=JSON.parse(s);if(t)escalaTravada=JSON.parse(t);lista();gerar();showMsg('📂 Recuperada automatico!');}trocaTipo();}
-</script></body></html>
+// Registrar Service Worker → vira App!
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('✅ App registrado', reg))
+      .catch(err => console.log('❌ Erro no registro', err));
+  });
+}
+
+const CHAVE_DADOS = 'escala_5x1_dados';
+const CHAVE_TRAVADA = 'escala_travada';
+let funcs = [];
+let escalaTravada = null;
+
+window.onload = function(){
+  const dadosSalvos = localStorage.getItem(CHAVE_DADOS);
+  const travadaSalva = localStorage.getItem(CHAVE_TRAVADA);
+  if(dadosSalvos) funcs = JSON.parse(dadosSalvos);
+  if(travadaSalva){
+    escalaTravada = travadaSalva;
+    document.getElementById('dataInicio').value = escalaTravada;
+    document.getElementById('areaFixa').style.display = 'block';
+    listar();
+  }
+};
+
+function definirEscala(){
+  const data = document.getElementById('dataInicio').value;
+  if(!data){ alert('Escolha uma data!'); return; }
+  escalaTravada = data;
+  localStorage.setItem(CHAVE_TRAVADA, data);
+  document.getElementById('areaFixa').style.display = 'block';
+  mostrarMsg('✅ Escala definida e travada em: ' + data);
+}
+
+function mostrarMsg(texto){
+  const m = document.getElementById('msg');
+  m.style.display = 'block';
+  m.textContent = texto;
+  setTimeout(()=>m.style.display='none', 4000);
+}
+
+function adicionar(){
+  const nome = document.getElementById('nome').value.trim();
+  if(!nome){ alert('Digite o nome!'); return; }
+  const hinicio = document.getElementById('hinicio').value;
+  const hterm = document.getElementById('hterm').value;
+  const tipo = document.getElementById('tipo').value;
+  const diaSemana = document.getElementById('diaSemana').value;
+  const inicioFolga = document.getElementById('inicioFolga').value;
+  const diasFolga = document.getElementById('diasFolga').value;
+
+  funcs.push({nome, hinicio, hterm, tipo, diaSemana, inicioFolga, diasFolga});
+  salvarDefinitivo();
+  listar();
+  
+  // Limpar
+  document.getElementById('nome').value = '';
+  mostrarMsg('✅ ' + nome + ' adicionado!');
+}
+
+function listar(){
+  const lista = document.getElementById('lista');
+  if(funcs.length === 0){
+    lista.innerHTML = '<strong>Pessoas cadastradas:</strong> Nenhuma';
+    return;
+  }
+  lista.innerHTML = funcs.map((p, i) => `
+    <div class="lista-item">
+      <div>
+        <strong>${p.nome}</strong><br>
+        ${p.hinicio} às ${p.hterm} — ${p.tipo}
+      </div>
+      <button class="btn-excluir" onclick="remover(${i})">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function remover(indice){
+  if(confirm('Remover essa pessoa?')){
+    funcs.splice(indice, 1);
+    salvarDefinitivo();
+    listar();
+    document.getElementById('tabela').innerHTML = '';
+  }
+}
+
+function salvarDefinitivo(){
+  localStorage.setItem(CHAVE_DADOS, JSON.stringify(funcs));
+  mostrarMsg('✅ Salvo!');
+}
+
+function carregarSalvo(){
+  const dados = localStorage.getItem(CHAVE_DADOS);
+  if(!dados){ alert('Nenhum dado salvo!'); return; }
+  funcs = JSON.parse(dados);
+  listar();
+  mostrarMsg('✅ Dados carregados!');
+}
+
+function limparTudo(){
+  if(!confirm('Tem certeza? Apaga tudo!')) return;
+  funcs = [];
+  escalaTravada = null;
+  localStorage.removeItem(CHAVE_DADOS);
+  localStorage.removeItem(CHAVE_TRAVADA);
+  document.getElementById('areaFixa').style.display = 'none';
+  document.getElementById('tabela').innerHTML = '';
+  listar();
+  mostrarMsg('🗑️ Tudo limpo!');
+}
+
+function exemplo(){
+  funcs = [
+    {nome:'Natália', hinicio:'08:00', hterm:'17:00', tipo:'5x1', diaSemana:'', inicioFolga:'', diasFolga:''},
+    {nome:'Segundo', hinicio:'09:00', hterm:'18:00', tipo:'5x1', diaSemana:'', inicioFolga:'', diasFolga:''}
+  ];
+  salvarDefinitivo();
+  listar();
+  mostrarMsg('✅ Exemplo carregado!');
+}
+
+function gerar(){
+  if(!escalaTravada){ alert('Defina a data de início primeiro!'); return; }
+  
+  const mes = parseInt(document.getElementById('mes').value);
+  const ano = parseInt(document.getElementById('ano').value);
+  const tabela = document.getElementById('tabela');
+  
+  // Dias do mês
+  const diasMes = new Date(ano, mes, 0).getDate();
+  const nomesDias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  
+  let cabecalho = '<tr><th>Data</th><th>Dia</th>';
+  funcs.forEach(p => cabecalho += `<th>${p.nome}</th>`);
+  cabecalho += '</tr>';
+  
+  let linhas = '';
+  for(let dia=1; dia<=diasMes; dia++){
+    const dataAtual = new Date(ano, mes-1, dia);
+    const diaSemana = nomesDias[dataAtual.getDay()];
+    const dataStr = `${dia}/${mes}`;
+    
+    let celulas = '';
+    funcs.forEach(p => {
+      let texto = `${p.hinicio}–${p.hterm}`;
+      let estilo = '';
+      
+      // Lógica 5x1: conta a partir da data inicial travada
+      if(p.tipo === '5x1'){
+        const dataInicioObj = new Date(escalaTravada);
+        const difDias = Math.floor((dataAtual - dataInicioObj) / (1000*60*60*24));
+        const ciclo = difDias % 6; // 5 trabalho + 1 folga
+        if(ciclo === 5){
+          texto = 'FOLGA';
+          estilo = 'color:#e67e22; font-weight:bold;';
+        }
+      }
+      
+      celulas += `<td style="${estilo}">${texto}</td>`;
+    });
+    
+    linhas += `<tr><td>${dataStr}</td><td>${diaSemana}</td>${celulas}</tr>`;
+  }
+  
+  tabela.innerHTML = cabecalho + linhas;
+  mostrarMsg('✅ Escala gerada!');
+}
+
+// 💾 BAIXAR BACKUP
+function fazerBackup(){
+  const dados = {
+    data: new Date().toLocaleString('pt-BR'),
+    versao: '2.0',
+    escalaTravada,
+    funcionarios: funcs
+  };
+  const blob = new Blob([JSON.stringify(dados, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `backup_escala_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  mostrarMsg('✅ Backup baixado!');
+}
+
+// ♻️ RESTAURAR
+function restaurarArquivo(){
+  document.getElementById('inputRestaurar').click();
+}
+
+function processarRestaurar(event){
+  const arq = event.target.files[0];
+  if(!arq) return;
+  if(!confirm('Substitui dados atuais?')) return;
+  
+  const leitor = new FileReader();
+  leitor.onload = (e) => {
+    try{
+      const d = JSON.parse(e.target.result);
+      funcs = d.funcionarios || [];
+      if(d.escalaTravada){
+        escalaTravada = d.escalaTravada;
+        localStorage.setItem(CHAVE_TRAVADA, escalaTravada);
+        document.getElementById('dataInicio').value = escalaTravada;
+        document.getElementById('areaFixa').style.display = 'block';
+      }
+      salvarDefinitivo();
+      listar();
+      mostrarMsg('✅ Restaurado com sucesso!');
+    }catch{ alert('❌ Arquivo inválido!'); }
+  };
+  leitor.readAsText(arq);
+  event.target.value = '';
+}
+
+// 🔗 COMPARTILHAR
+function compartilhar(){
+  const texto = `📅 Escala 5x1 — ${funcs.length} pessoas\nData base: ${escalaTravada || 'Não definida'}\n\n` +
+    funcs.map(p => `👤 ${p.nome}: ${p.hinicio} às ${p.hterm} (${p.tipo})`).join('\n');
+  
+  if(navigator.share) navigator.share({title:'Escala 5x1', text:texto});
+  else {navigator.clipboard.writeText(texto); alert('✅ Copiado!');}
+}
+</script>
+</body>
+</html>

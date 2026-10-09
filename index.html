@@ -47,7 +47,41 @@ td{border:1px solid #ccc;padding:5px;text-align:center}
 <label>1 - NOME</label><input id="nome" placeholder="Ex: Jose Marcos">
 <label>2 - HORARIO</label><div class="row"><input type="time" id="hin" value="10:00"><input type="time" id="hout" value="18:20"></div>
 <label>3 - TIPO</label><select id="tipo" onchange="trocaTipo()"><option value="5x1">5x1 AUTOMATICO</option><option value="fixa">FOLGA FIXA</option><option value="encarregado">ENCARREGADO Sab Dom</option><option value="folguista">FOLGUISTA MADRUGADA</option><option value="personal">PERSONALIZADA</option></select>
-<div id="areaFixa" style="display:none"><label>DIA FOLGA</label><select id="diaSemana"><option>Segunda</option><option>Terca</option><option>Quarta</option><option>Quinta</option><option>Sexta</option><option>Sabado</option><option>Domingo</option></select></div>
+<!-- ===== GERENCIADOR DE FUNCIONARIOS - NOVO ===== -->
+<div class="card" style="background:#fff8dc;border:2px solid #f4e79d">
+<label style="color:#8a6d00;font-size:13px">👷 1 - CADASTRE OS FUNCIONÁRIOS (nome aparece na folga)</label>
+<div style="display:flex;gap:6px;margin:6px 0">
+<input id="novoFuncNome" placeholder="Ex: Natal, Kaue, Mario..." style="flex:1">
+<button onclick="addFuncionario()" style="width:90px;background:#f4a600;color:#000;font-weight:900">+ ADD</button>
+</div>
+<div id="listaFuncionarios" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+<div style="font-size:10px;color:#666;margin-top:4px">Toque em X para apagar. O nome que você adicionar aqui vira opção em "INICIO FOLGA"</div>
+</div>
+
+<div id="areaFixa" style="display:none"><label>2 - DIA FOLGA</label><select id="diaSemana">
+<option value="Segunda">Segunda</option><option value="Terça">Terça</option>
+<option value="Quarta">Quarta</option><option value="Quinta">Quinta</option>
+<option value="Sexta">Sexta</option><option value="Sábado">Sábado</option><option value="Domingo">Domingo</option>
+</select></div>
+
+<div id="area5x1" class="card" style="background:#e8f4ff">
+<label style="color:#0055aa">2 - INICIO FOLGA (quem folga no dia 06?)</label>
+<select id="folgaInicial" style="font-weight:bold">
+<!-- vai ser preenchido automatico com os nomes -->
+</select>
+<div style="font-size:11px;color:#333;margin-top:4px">Escolha qual funcionário folga no primeiro dia da lista abaixo. Os outros vão rodando automaticamente 5x1</div>
+</div>
+
+<div id="areaPers" style="display:none" class="card" style="background:#ffeafb">
+<label>2 - DIAS QUE FOLGA (selecione)</label>
+<div id="checkFuncionarios" style="background:#fff;padding:8px;border-radius:6px;border:1px solid #ccc;max-height:120px;overflow:auto"></div>
+<label>DIAS DE FOLGA NO MÊS (Ex: 5,12,19,26)</label><input id="diasFolga" placeholder="Ex: 5,12,19,26" type="text">
+</div>
+
+<div id="areaFolguista" style="display:none" class="card" style="background:#e6e8ff">
+<label>FOLGUISTA FIXO?</label>
+<select id="folguistaNome"></select>
+</div>
 <div id="area5x1"><label>INICIO FOLGA</label><select id="inicioFolga"><option value="0">Folga 06,12,18,24,30</option><option value="1">Folga 05,11,17,23,29</option><option value="2">Folga 04,10,16,22,28</option><option value="3">Folga 03,09,15,21,27</option><option value="4">Folga 02,08,14,20,26</option><option value="5">Folga 01,07,13,19,25,31</option></select></div>
 <div id="areaPers" style="display:none"><label>DIAS QUE FOLGA</label><input id="diasFolga" placeholder="Ex: 5,12,19,26"></div>
 <div id="areaFolguista" style="display:none;background:#d6eaf8;padding:8px;border-radius:6px;margin-top:6px;font-size:11px"><b>Folguista so quando madrugada folgar.</b></div>

@@ -337,6 +337,97 @@ function abrirWhats(){
 
 // inicia verificação
 setTimeout(mostrarBloqueio, 800);
+  // ===== SISTEMA DE FUNCIONARIOS DINAMICO =====
+const KEY_FUNCS = "funcionarios_escala_v2";
+
+function getFuncionarios(){
+  let lista = JSON.parse(localStorage.getItem(KEY_FUNCS)||'null');
+  if(!lista || lista.length===0){
+    // primeira vez - pega do seu antigo
+    lista = ["Natal","Kaue","Mario","Jose Marcos","Folguista"];
+    localStorage.setItem(KEY_FUNCS, JSON.stringify(lista));
+  }
+  return lista;
+}
+
+function salvarFuncionarios(lista){
+  localStorage.setItem(KEY_FUNCS, JSON.stringify(lista));
+  renderFuncionarios();
+}
+
+function addFuncionario(){
+  let input = document.getElementById('novoFuncNome');
+  let nome = input.value.trim();
+  if(!nome){alert('Digite o nome!'); return}
+  if(nome.length<2){alert('Nome muito curto'); return}
+  let lista = getFuncionarios();
+  if(lista.map(n=>n.toLowerCase()).includes(nome.toLowerCase())){
+    alert('Esse nome já existe!');
+    return;
+  }
+  lista.push(nome);
+  salvarFuncionarios(lista);
+  input.value='';
+  toast("Funcionário "+nome+" adicionado!");
+}
+
+function removerFuncionario(nome){
+  if(!confirm("Apagar "+nome+"?")) return;
+  let lista = getFuncionarios().filter(n=>n!==nome);
+  salvarFuncionarios(lista);
+}
+
+function renderFuncionarios(){
+  let lista = getFuncionarios();
+  // 1 - Mostra chips
+  let div = document.getElementById('listaFuncionarios');
+  if(div){
+    div.innerHTML = lista.map(nome=>`
+      <span style="background:#000;color:#ffcc00;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:6px">
+        ${nome} <b onclick="removerFuncionario('${nome}')" style="background:#ff4444;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px">X</b>
+      </span>
+    `).join('');
+  }
+  // 2 - Preenche o select INICIO FOLGA (que aparece na sua foto)
+  let sel = document.getElementById('folgaInicial');
+  if(sel){
+    sel.innerHTML = lista.map((nome,i)=>{
+      let folgas = [6,12,18,24,30]; // exemplo de folgas 5x1
+      let txt = i===0 ? `${nome} folga (${folgas.join(',')})` : `${nome} folga`;
+      return `<option value="${i}">${txt}</option>`;
+    }).join('') + `<option value="999">Todos trabalham</option>`;
+  }
+  // 3 - Preenche folguista
+  let selF = document.getElementById('folguistaNome');
+  if(selF){
+    selF.innerHTML = lista.map(n=>`<option value="${n}">${n}</option>`).join('');
+  }
+  // 4 - Preenche checks do modo personalizado
+  let checkDiv = document.getElementById('checkFuncionarios');
+  if(checkDiv){
+    checkDiv.innerHTML = lista.map(n=>`
+      <label style="display:block;font-size:12px;margin:3px 0"><input type="checkbox" value="${n}" class="checkFunc"> ${n}</label>
+    `).join('');
+  }
+}
+
+// Ajusta sua função antiga add() para usar nome dinâmico
+const addOriginal = window.add;
+window.add = function(){
+  let lista = getFuncionarios();
+  let idx = parseInt(document.getElementById('folgaInicial')?.value||0);
+  if(idx===999){
+    // todos trabalham
+    if(typeof addOriginal==="function") addOriginal();
+    return;
+  }
+  // chama sua função original mas com nome certo
+  if(typeof addOriginal==="function") addOriginal();
+}
+
+// inicia
+setTimeout(renderFuncionarios, 500);
+function toast(msg){let m=document.getElementById('msg'); if(m){m.style.display='block'; m.innerText=msg; setTimeout(()=>m.style.display='none',2500)}}
 </script>
 <!-- FIM SISTEMA MONETIZAÇÃO -->
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+8<!DOCTYPE html>
 <html lang="pt-BR">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESCALA 5x1 - FINAL</title>
@@ -199,4 +199,111 @@ window.onload=function(){
   lista();if(funcs.length>0)gerar();trocaTipo();
   if(funcs.length>0) showMsg('📂 Recuperado automatico! '+funcs.length+' funcs');
 }
-</script></body></html>
+</script></body><!-- SISTEMA DE BLOQUEIO E MONETIZAÇÃO GRATIFLIX -->
+<div id="bloqueioPaywall" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:10000;padding:15px;align-items:center;justify-content:center;overflow:auto">
+<div style="background:#111;border:2px solid #ffcc00;border-radius:16px;max-width:400px;width:100%;padding:18px;text-align:center">
+<h2 style="color:#ffcc00">🔒 ESCALA BLOQUEADA</h2>
+<p id="msgBloqueio" style="font-size:13px;margin:10px 0;color:#ccc">Seu teste grátis de 3 dias acabou!</p>
+
+<div style="background:#000;border-radius:10px;padding:10px;margin:12px 0;text-align:left">
+<div style="font-size:11px;color:#ffcc00;font-weight:900">💰 PLANOS:</div>
+<label style="display:flex;justify-content:space-between;background:#222;padding:10px;border-radius:8px;margin:6px 0;cursor:pointer"><span><input type="radio" name="plano" value="1" checked> 1 DIA</span><b style="color:#00e676">R$2,99</b></label>
+<label style="display:flex;justify-content:space-between;background:#222;padding:10px;border-radius:8px;margin:6px 0;cursor:pointer"><span><input type="radio" name="plano" value="7"> 1 SEMANA</span><b style="color:#00e676">R$10,00</b></label>
+<label style="display:flex;justify-content:space-between;background:#ffcc00;color:#000;padding:10px;border-radius:8px;margin:6px 0;cursor:pointer;font-weight:900"><span><input type="radio" name="plano" value="30"> 1 MÊS</span><b>R$28,00</b></label>
+<label style="display:flex;justify-content:space-between;background:#222;padding:10px;border-radius:8px;margin:6px 0;cursor:pointer"><span><input type="radio" name="plano" value="365"> 1 ANO</span><b style="color:#00e676">R$300,00</b></label>
+</div>
+
+<div style="background:#1a1a00;border:1px dashed #ffcc00;border-radius:10px;padding:10px;margin:10px 0">
+<div style="font-size:11px">🔑 CHAVE PIX (CPF):</div>
+<b style="color:#ffcc00;font-size:16px;user-select:all">025.446.319-37</b><br>
+<button onclick="navigator.clipboard.writeText('02544631937');alert('PIX copiado!')" style="background:#ffcc00;border:0;padding:6px 12px;border-radius:20px;font-weight:900;margin-top:6px;font-size:11px">COPIAR PIX</button>
+<div style="font-size:10px;color:#aaa;margin-top:6px">Faça o PIX e envie o comprovante no WhatsApp (41) 99893-6718 para receber o código de desbloqueio</div>
+</div>
+
+<input id="codigoDesbloqueio" placeholder="Cole aqui o código que recebeu" style="width:100%;background:#222;border:1px solid #444;color:#fff;padding:12px;border-radius:8px;text-align:center;font-weight:900;letter-spacing:1px">
+<button onclick="validarCodigo()" style="width:100%;background:#00c853;color:#fff;border:0;padding:12px;border-radius:8px;font-weight:900;margin-top:8px">✅ DESBLOQUEAR AGORA</button>
+<button onclick="abrirWhats()" style="width:100%;background:#25d366;color:#fff;border:0;padding:10px;border-radius:8px;font-weight:800;margin-top:6px;font-size:12px">📲 ENVIAR COMPROVANTE NO WHATSAPP</button>
+<div style="font-size:10px;color:#666;margin-top:8px">Após o pagamento o sistema gera um código válido apenas para seu aparelho</div>
+</div>
+</div>
+
+<script>
+// ===== SISTEMA DE LICENÇA GRATIFLIX =====
+const SEGREDO = "GRATIDAO41_BANCO_2026"; // não mexa
+const KEY_INSTAL = "grati_instal_data";
+const KEY_LICENCA = "grati_licenca_v2";
+
+function gerarHash(str){let h=0; for(let i=0;i<str.length;i++){h=((h<<5)-h)+str.charCodeAt(i); h|=0;} return Math.abs(h).toString(36).toUpperCase()}
+
+function criarCodigo(dias){
+  let exp = Date.now() + (dias*24*60*60*1000);
+  let base = dias+"|"+exp;
+  let hash = gerarHash(base+"|"+SEGREDO).substring(0,6);
+  let code = "GRATI-"+dias+"-"+exp.toString(36).toUpperCase()+"-"+hash;
+  return code;
+}
+
+function validarCodigo(){
+  let input = document.getElementById('codigoDesbloqueio').value.trim().toUpperCase();
+  if(!input){alert('Cole o código'); return}
+  let partes = input.split('-');
+  if(partes.length!==4 || partes[0]!=='GRATI'){alert('Código inválido!'); return}
+  let dias = parseInt(partes[1]);
+  let exp = parseInt(partes[2],36);
+  let hashRecebido = partes[3];
+  let base = dias+"|"+exp;
+  let hashCalculado = gerarHash(base+"|"+SEGREDO).substring(0,6);
+  if(hashRecebido!==hashCalculado){alert('❌ Código inválido ou falsificado!'); return}
+  if(exp < Date.now()){alert('❌ Código expirado!'); return}
+  // SALVA LICENÇA
+  localStorage.setItem(KEY_LICENCA, JSON.stringify({dias, exp, code:input, ativado:Date.now()}));
+  alert("✅ DESBLOQUEADO por "+dias+" dia(s)! Aproveite.");
+  document.getElementById('bloqueioPaywall').style.display='none';
+  location.reload();
+}
+
+function verificarBloqueio(){
+  let instal = localStorage.getItem(KEY_INSTAL);
+  if(!instal){localStorage.setItem(KEY_INSTAL, Date.now()); instal = Date.now()} else instal = parseInt(instal);
+
+  // verifica licença ativa
+  let lic = JSON.parse(localStorage.getItem(KEY_LICENCA)||'null');
+  if(lic && lic.exp > Date.now()){
+    return false; // liberado
+  }
+  // verifica teste 3 dias
+  let diasDesdeInstal = (Date.now() - instal) / (24*60*60*1000);
+  if(diasDesdeInstal <= 3 &&!lic){
+    return false; // ainda no teste
+  }
+  return true; // bloqueado
+}
+
+function mostrarBloqueio(){
+  if(verificarBloqueio()){
+    document.getElementById('bloqueioPaywall').style.display='flex';
+    let lic = JSON.parse(localStorage.getItem(KEY_LICENCA)||'null');
+    let msg = document.getElementById('msgBloqueio');
+    if(lic && lic.exp < Date.now()){
+      msg.innerText = "Seu plano de "+lic.dias+" dia(s) expirou! Renove para continuar.";
+    } else {
+      let instal = parseInt(localStorage.getItem(KEY_INSTAL));
+      let dias = Math.floor((Date.now()-instal)/(24*60*60*1000));
+      msg.innerText = "Seu teste grátis de 3 dias acabou! Você usou "+dias+" dias. Escolha um plano abaixo.";
+    }
+  }
+}
+
+function abrirWhats(){
+  let plano = document.querySelector('input[name="plano"]:checked').value;
+  let valores = {1:"R$2,99 - 1 DIA",7:"R$10,00 - 1 SEMANA",30:"R$28,00 - 1 MÊS",365:"R$300,00 - 1 ANO"};
+  let texto = encodeURIComponent("Olá! Fiz o PIX da chave 025.446.319-37 para o plano "+valores[plano]+" do Gerador de Escalas. Segue comprovante. Meu código é: ");
+  window.open("https://wa.me/5541998936718?text="+texto,"_blank");
+}
+
+// inicia verificação
+setTimeout(mostrarBloqueio, 800);
+</script>
+<!-- FIM SISTEMA MONETIZAÇÃO -->
+
+</html>
